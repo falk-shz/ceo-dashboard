@@ -51,10 +51,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--tex
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:2rem}
-.stat-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.stat-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem 1.5rem;position:relative;overflow:visible;transition:border-color 0.2s;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.5;}
 .stat-label{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;padding-bottom:2px;}
 
 /* CARDS */
 .card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:14px;position:relative;overflow:hidden;}
@@ -232,84 +232,75 @@ body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--tex
     <div>The Company · Roblox</div>
     <div style="margin-top:6px" data-i="footer_storage">Data stored locally</div>
   </div>
-
-  <!-- MUSIC PANEL TOGGLE -->
-  <div style="border-top:1px solid var(--border);flex-shrink:0;">
-    <button onclick="toggleMusic()" style="
-      width:100%;display:flex;align-items:center;justify-content:space-between;
-      padding:10px 1.25rem;background:none;border:none;cursor:pointer;
-      font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
-      letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);
-      transition:background 0.15s;
-    " onmouseover="this.style.background='var(--gold-glow)'" onmouseout="this.style.background='none'">
-      <span style="display:flex;align-items:center;gap:8px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="18" r="3"/><circle cx="15" cy="15" r="3"/>
-          <path d="M12 18V9l4-2"/>
-        </svg>
-        Music
-      </span>
-      <span id="music-chevron" style="font-size:9px;transition:transform 0.3s;display:inline-block;transform:rotate(180deg);">▲</span>
-    </button>
-  </div>
 </aside>
 
 <!-- MUSIC FLOATING PANEL -->
-<div id="music-embed" style="
-  position:fixed;bottom:0;left:240px;
-  width:340px;
-  background:var(--black2);
-  border:1px solid var(--border);
-  border-bottom:none;
-  border-radius:14px 14px 0 0;
-  box-shadow:0 -8px 40px rgba(201,168,76,0.12);
-  z-index:200;
-  overflow:hidden;
+<div id="music-panel" style="
+  position:fixed;
+  bottom:0;
+  left:240px;
+  width:360px;
+  z-index:500;
   transition:transform 0.35s cubic-bezier(.4,0,.2,1);
   transform:translateY(0);
 ">
-  <!-- Panel header -->
-  <div style="
+  <!-- Header / toggle -->
+  <div onclick="toggleMusic()" style="
     display:flex;align-items:center;justify-content:space-between;
-    padding:10px 14px 8px;
-    border-bottom:1px solid var(--border);
+    padding:11px 16px;
+    background:var(--black2);
+    border:1px solid var(--border);
+    border-bottom:none;
+    border-radius:14px 14px 0 0;
     cursor:pointer;
-  " onclick="toggleMusic()">
-    <div style="display:flex;align-items:center;gap:8px;">
+    box-shadow:0 -6px 30px rgba(201,168,76,0.1);
+  ">
+    <div style="display:flex;align-items:center;gap:9px;">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="18" r="3"/><circle cx="15" cy="15" r="3"/>
         <path d="M12 18V9l4-2"/>
       </svg>
-      <span style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold)">Now Playing</span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Now Playing</span>
     </div>
-    <span id="music-chevron" style="font-size:9px;color:var(--text3);transition:transform 0.3s;display:inline-block;transform:rotate(180deg);">▲</span>
+    <span id="mc" style="font-size:10px;color:var(--text2);transition:transform 0.3s;display:inline-block;">▼</span>
   </div>
-  <!-- Spotify embed -->
-  <div style="padding:10px;">
+  <!-- Embed body -->
+  <div id="music-body" style="
+    background:var(--black2);
+    border:1px solid var(--border);
+    border-top:none;
+    border-radius:0 0 0 0;
+    padding:10px 10px 0 10px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.5);
+  ">
     <iframe
-      data-testid="embed-iframe"
       style="border-radius:10px;display:block;"
       src="https://open.spotify.com/embed/playlist/0F2ohQJLxJmIjIWJ7J7gXt?utm_source=generator&theme=0"
       width="100%"
-      height="420"
+      height="440"
       frameBorder="0"
       allowfullscreen=""
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       loading="lazy">
     </iframe>
+    <div style="height:10px"></div>
   </div>
 </div>
 
 <script>
-var musicOpen = true;
+var _mOpen = true;
 function toggleMusic() {
-  musicOpen = !musicOpen;
-  var panel = document.getElementById('music-embed');
-  var chevron = document.getElementById('music-chevron');
-  // hide by sliding down (only the embed part, keep header visible)
-  panel.style.transform = musicOpen ? 'translateY(0)' : 'translateY(calc(100% - 40px))';
-  chevron.style.transform = musicOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+  _mOpen = !_mOpen;
+  var panel  = document.getElementById('music-panel');
+  var body   = document.getElementById('music-body');
+  var chevron= document.getElementById('mc');
+  // slide entire panel down so only header stays visible
+  var bodyH  = body.offsetHeight;
+  panel.style.transform = _mOpen ? 'translateY(0)' : 'translateY(' + bodyH + 'px)';
+  chevron.style.transform = _mOpen ? 'rotate(180deg)' : 'rotate(0deg)';
 }
+// Set initial chevron state (open = pointing up)
+document.getElementById('mc').style.transform = 'rotate(180deg)';
 </script>
 
 <!-- MAIN -->
