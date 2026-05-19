@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Company — CEO Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#07080a;--black2:#0e0f13;--black3:#161820;--black4:#1e2028;
+  --gold:#c9a84c;--gold2:#e8c96a;--gold3:#f5e0a0;
+  --gold-dim:rgba(201,168,76,0.15);--gold-glow:rgba(201,168,76,0.08);
+  --text:#f0ead8;--text2:#9a9070;--text3:#5a5448;
+  --border:rgba(201,168,76,0.18);--border2:rgba(201,168,76,0.08);
+  --red:#c0392b;--red-bg:rgba(192,57,43,0.12);
+  --amber:#c87941;--amber-bg:rgba(200,121,65,0.12);
+  --green:#4a9e6a;--green-bg:rgba(74,158,106,0.12);
+  --radius:6px;--radius-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,168,76,0.06) 0%,transparent 60%),
+  repeating-linear-gradient(0deg,transparent,transparent 80px,rgba(201,168,76,0.015) 80px,rgba(201,168,76,0.015) 81px),
+  repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(201,168,76,0.015) 80px,rgba(201,168,76,0.015) 81px);}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--black4);border-radius:4px}
+.shell{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:240px;flex-shrink:0;background:linear-gradient(180deg,var(--black2) 0%,var(--black) 100%);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.logo-area{padding:2rem 1.5rem 1.75rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center;}
+.logo-wordmark{font-family:'Cormorant Garamond',serif;font-size:11px;font-weight:600;letter-spacing:0.25em;color:var(--text2);text-transform:uppercase;margin-bottom:2px;}
+.logo-title{font-size:18px;font-weight:800;letter-spacing:0.08em;background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;}
+.logo-sub{font-size:9px;letter-spacing:0.2em;color:var(--text3);margin-top:4px;text-transform:uppercase;}
+.nav-section{padding:1.25rem 0}
+.nav-label{font-size:9px;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;padding:0 1.5rem;margin-bottom:8px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 1.5rem;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Montserrat',sans-serif;letter-spacing:0.06em;text-transform:uppercase;border-left:2px solid transparent;transition:all 0.2s;}
+.nav-item:hover{color:var(--gold2);background:var(--gold-glow)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
+.nav-icon{font-size:14px;width:16px;text-align:center}
+.sidebar-footer{margin-top:auto;padding:1.25rem 1.5rem;border-top:1px solid var(--border);font-size:10px;letter-spacing:0.08em;color:var(--text3);text-transform:uppercase;}
+
+/* MAIN */
+.main{flex:1;min-width:0;padding:2.5rem 3rem}
+.page{display:none;animation:fadeUp 0.25s ease}.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.page-eyebrow{font-size:9px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--text);letter-spacing:-0.01em;line-height:1.1;}
+.page-sub{font-size:11px;color:var(--text3);margin-top:6px;letter-spacing:0.06em}
+.gold-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0;opacity:0.4;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:2rem}
+.stat-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.5;}
+.stat-label{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+
+/* CARDS */
+.card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:14px;position:relative;overflow:hidden;}
+.card-title{font-size:10px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:1.25rem;font-weight:600;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.field label{display:block;font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:6px;}
+.field input,.field select{width:100%;padding:9px 14px;background:var(--black3);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);color:var(--text);font-family:'Montserrat',sans-serif;font-size:12px;transition:border-color 0.2s,box-shadow 0.2s;}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
+.field select option{background:var(--black3)}.field input::placeholder{color:var(--text3)}
+
+/* BUTTONS */
+.btn{padding:9px 20px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;}
+.btn:hover{background:var(--black3);color:var(--text);border-color:rgba(201,168,76,0.3)}
+.btn-gold{background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);color:var(--black);border-color:var(--gold);font-weight:800;}
+.btn-gold:hover{background:linear-gradient(135deg,var(--gold2) 0%,var(--gold3) 100%);color:var(--black)}
+.btn-danger{color:var(--red);border-color:rgba(192,57,43,0.3)}.btn-danger:hover{background:var(--red-bg)}
+.btn-sm{padding:5px 14px;font-size:9px}
+
+/* BADGES */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.1em;padding:3px 9px;border-radius:999px;text-transform:uppercase;}
+.b-red{background:var(--red-bg);color:#e05a4a;border:1px solid rgba(192,57,43,0.3)}
+.b-amb{background:var(--amber-bg);color:#d4894a;border:1px solid rgba(200,121,65,0.3)}
+.b-grn{background:var(--green-bg);color:#5aae7a;border:1px solid rgba(74,158,106,0.3)}
+.b-gold{background:var(--gold-dim);color:var(--gold2);border:1px solid var(--border)}
+.b-blue{background:rgba(74,120,200,0.12);color:#6a9add;border:1px solid rgba(74,120,200,0.3)}
+.b-pur{background:rgba(140,90,200,0.12);color:#b07aee;border:1px solid rgba(140,90,200,0.3)}
+.b-teal{background:rgba(60,180,160,0.12);color:#4abfb0;border:1px solid rgba(60,180,160,0.3)}
+.b-or{background:rgba(200,120,60,0.12);color:#d4924a;border:1px solid rgba(200,120,60,0.3)}
+.b-gray{background:rgba(100,100,110,0.15);color:var(--text2);border:1px solid rgba(100,100,110,0.25)}
+
+/* ALERTS */
+.alert{border-radius:var(--radius);padding:10px 16px;font-size:11px;margin-bottom:14px;display:none;letter-spacing:0.04em}
+.a-err{background:var(--red-bg);color:#e05a4a;border:1px solid rgba(192,57,43,0.3)}
+.a-ok{background:var(--green-bg);color:#5aae7a;border:1px solid rgba(74,158,106,0.3)}
+
+/* BRANCH TABS */
+.branch-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.branch-tab{padding:7px 16px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(201,168,76,0.2);border-radius:999px;cursor:pointer;background:transparent;color:var(--text3);font-family:'Montserrat',sans-serif;transition:all 0.2s;}
+.branch-tab:hover{color:var(--gold2);border-color:rgba(201,168,76,0.4)}
+.branch-tab.active{background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+.branch-tab.hq{color:var(--gold2);border-color:rgba(201,168,76,0.35)}
+.branch-tab.closed{opacity:0.3}
+
+/* CRITERIA */
+.crit-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.crit-row:last-child{border-bottom:none}
+.crit-name{font-size:10px;letter-spacing:0.1em;color:var(--text2);width:155px;flex-shrink:0;text-transform:uppercase}
+.crit-bar{flex:1;height:3px;background:var(--black4);border-radius:2px;overflow:hidden;min-width:60px}
+.crit-fill{height:100%;border-radius:2px;transition:width 0.15s,background 0.15s}
+.crit-val{font-size:12px;font-weight:700;font-family:'Cormorant Garamond',serif;width:28px;text-align:right;flex-shrink:0}
+.crit-slider{width:80px;flex-shrink:0;cursor:pointer;-webkit-appearance:none;appearance:none;height:2px;border-radius:2px;background:var(--black4);border:none;padding:0;}
+.crit-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(201,168,76,0.5);}
+.dept-chips{display:flex;flex-wrap:wrap;gap:3px;min-width:0}
+.dept-chip{font-size:8px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--black3);border:1px solid var(--border2);color:var(--text3);white-space:nowrap;}
+
+/* STAFF */
+.staff-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.staff-row:last-child{border-bottom:none}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--black3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;font-family:'Cormorant Garamond',serif;}
+.staff-name{font-size:13px;font-weight:600;color:var(--text);font-family:'Cormorant Garamond',serif}
+.staff-meta{font-size:10px;color:var(--text3);letter-spacing:0.05em;margin-top:1px}
+.staff-select{width:125px;font-size:10px;padding:5px 9px;flex-shrink:0;background:var(--black3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-family:'Montserrat',sans-serif;}
+
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.ov-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;position:relative;overflow:hidden;}
+.ov-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.3;}
+.ov-card-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.mini-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:10px}
+.mini-name{width:115px;flex-shrink:0;color:var(--text3);letter-spacing:0.05em}
+.mini-bar-wrap{flex:1;height:2px;background:var(--black4);border-radius:2px;overflow:hidden}
+.mini-bar-fill{height:100%;border-radius:2px}
+.mini-val{width:22px;text-align:right;flex-shrink:0;font-weight:700;font-family:'Cormorant Garamond',serif;font-size:12px}
+
+/* REC */
+.rec-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:12px}
+.rec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.crit-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.pool-label{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+.rec-staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:6px}
+.rec-staff-card{background:var(--black3);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.rec-rank-label{font-size:9px;letter-spacing:0.1em;color:var(--gold2);text-transform:uppercase;margin-bottom:2px;font-weight:600}
+
+/* MEMBER GRID */
+.member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px}
+.member-card{background:var(--black3);border:1px solid var(--border2);border-radius:var(--radius);padding:0.75rem 1rem;display:flex;align-items:center;gap:10px;}
+.dept-section{margin-bottom:1.25rem}
+.dept-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.hq-banner{background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.03));border:1px solid rgba(201,168,76,0.25);border-radius:var(--radius);padding:10px 16px;font-size:10px;letter-spacing:0.1em;color:var(--gold2);margin-bottom:16px;display:flex;align-items:center;gap:10px;text-transform:uppercase;}
+.empty{text-align:center;padding:3rem;color:var(--text3);font-size:12px;letter-spacing:0.1em;text-transform:uppercase}
+.search-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-row input,.search-row select{flex:1;min-width:130px;padding:9px 14px;background:var(--black3);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);color:var(--text);font-family:'Montserrat',sans-serif;font-size:12px;}
+.search-row input:focus,.search-row select:focus{outline:none;border-color:var(--gold)}
+.search-row input::placeholder{color:var(--text3)}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:520px;position:relative;animation:fadeUp 0.2s ease;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:1.5rem;}
+.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;font-family:'Montserrat',sans-serif;transition:color 0.15s;}
+.modal-close:hover{color:var(--gold)}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+
+/* SETTINGS */
+.settings-section{margin-bottom:2rem}
+.settings-title{font-size:10px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.lang-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.lang-btn{padding:10px 16px;font-size:11px;font-weight:600;letter-spacing:0.08em;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:8px;}
+.lang-btn:hover{border-color:rgba(201,168,76,0.4);color:var(--gold2)}
+.lang-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.lang-flag{font-size:16px}
+
+/* CREDITS */
+.credits-box{background:var(--black3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem;}
+.discord-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px rgba(201,168,76,0.3);}
+.credits-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold2)}
+.credits-label{font-size:10px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:768px){.sidebar{display:none}.main{padding:1.25rem}.form-grid,.form-grid-3{grid-template-columns:1fr}}
+
+/* CHANGELOG */
+.cl-timeline{position:relative;padding-left:28px}
+.cl-timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg,var(--gold),transparent);opacity:0.3}
+.cl-entry{position:relative;margin-bottom:1.5rem}
+.cl-entry::before{content:'';position:absolute;left:-24px;top:16px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(201,168,76,0.5);flex-shrink:0}
+.cl-card{background:var(--black2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;transition:border-color 0.2s}
+.cl-card:hover{border-color:rgba(201,168,76,0.35)}
+.cl-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.cl-version{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold2);letter-spacing:-0.01em}
+.cl-date{font-size:10px;font-family:'Montserrat',sans-serif;color:var(--text3);letter-spacing:0.1em;margin-top:3px}
+.cl-type-badge{font-size:9px;font-weight:700;letter-spacing:0.12em;padding:4px 12px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
+.cl-feature{background:rgba(74,158,106,0.12);color:#5aae7a;border:1px solid rgba(74,158,106,0.3)}
+.cl-fix{background:rgba(90,180,255,0.12);color:#6aaaf0;border:1px solid rgba(90,180,255,0.3)}
+.cl-improvement{background:rgba(200,121,65,0.12);color:#d4894a;border:1px solid rgba(200,121,65,0.3)}
+.cl-breaking{background:var(--red-bg);color:#e05a4a;border:1px solid rgba(192,57,43,0.3)}
+.cl-entry-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;font-family:'Cormorant Garamond',serif;font-size:17px}
+.cl-entry-desc{font-size:12px;color:var(--text2);line-height:1.6;letter-spacing:0.02em}
+.cl-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)}
+.cl-empty{text-align:center;padding:3rem;color:var(--text3);font-size:12px;letter-spacing:0.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo-area">
+    <div style="width:85px;height:85px;margin-bottom:1rem">
+      <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg" width="85" height="85">
+        <defs>
+          <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#c9a84c"/><stop offset="50%" style="stop-color:#f5e0a0"/><stop offset="100%" style="stop-color:#c9a84c"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect x="4" y="18" width="82" height="60" rx="2" fill="none" stroke="url(#gg)" stroke-width="1.2" opacity="0.8"/>
+        <rect x="7" y="21" width="76" height="54" rx="1" fill="none" stroke="url(#gg)" stroke-width="0.4" opacity="0.3"/>
+        <rect x="12" y="62" width="7" height="8" fill="url(#gg)" opacity="0.9"/>
+        <rect x="22" y="55" width="7" height="15" fill="url(#gg)" opacity="0.9"/>
+        <rect x="32" y="46" width="7" height="24" fill="url(#gg)" opacity="0.9"/>
+        <rect x="42" y="37" width="7" height="33" fill="url(#gg)" opacity="0.9"/>
+        <polyline points="15,65 25,58 35,49 45,40 56,30" fill="none" stroke="url(#gg)" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="15" cy="65" r="2" fill="url(#gg)"/><circle cx="25" cy="58" r="2" fill="url(#gg)"/>
+        <circle cx="35" cy="49" r="2" fill="url(#gg)"/><circle cx="45" cy="40" r="2" fill="url(#gg)"/>
+        <circle cx="56" cy="30" r="2" fill="url(#gg)"/>
+        <line x1="54" y1="32" x2="62" y2="24" stroke="url(#gg)" stroke-width="1.5" filter="url(#glow)"/>
+        <polygon points="62,22 58,26 65,27" fill="url(#gg)"/>
+        <rect x="60" y="38" width="20" height="25" rx="1" fill="none" stroke="url(#gg)" stroke-width="1" opacity="0.7"/>
+        <circle cx="66" cy="47" r="3" fill="url(#gg)" opacity="0.8"/>
+        <rect x="60" y="52" width="10" height="1.2" fill="url(#gg)" opacity="0.5"/>
+        <rect x="60" y="55" width="7" height="1.2" fill="url(#gg)" opacity="0.5"/>
+        <rect x="60" y="58" width="9" height="1.2" fill="url(#gg)" opacity="0.5"/>
+        <circle cx="58" cy="30" r="8" fill="url(#gg)" opacity="0.06"/>
+      </svg>
+    </div>
+    <div class="logo-wordmark">The Company</div>
+    <div class="logo-title">CEO</div>
+    <div class="logo-sub" id="sb-sub">Execute · Analyze · Lead</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label" id="sb-nav-lbl">Navigation</div>
+    <button class="nav-item active" onclick="showPage('overview',this)"><span class="nav-icon">◈</span> <span data-i="nav_overview">Overview</span></button>
+    <button class="nav-item" onclick="showPage('branches',this)"><span class="nav-icon">◉</span> <span data-i="nav_branches">Branches</span></button>
+    <button class="nav-item" onclick="showPage('staff',this)"><span class="nav-icon">◎</span> <span data-i="nav_staff">Staff</span></button>
+    <button class="nav-item" onclick="showPage('recommend',this)"><span class="nav-icon">◆</span> <span data-i="nav_recommend">Recommend</span></button>
+    <button class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span> <span data-i="nav_settings">Settings</span></button>
+    <button class="nav-item" onclick="showPage('changelog',this)"><span class="nav-icon">📋</span> <span data-i="nav_changelog">Changelog</span></button>
+  </div>
+  <div class="sidebar-footer">
+    <div style="color:var(--gold2);font-weight:600;margin-bottom:6px">v3.0 — CEO Tool</div>
+    <div>The Company · Roblox</div>
+    <div style="margin-top:6px" data-i="footer_storage">Data stored locally</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="ov_eyebrow">Executive Overview</div>
+      <div class="page-title" data-i="ov_title">Overview</div>
+      <div class="page-sub" data-i="ov_sub">All branches & analytics at a glance</div>
+    </div>
+    <div class="stats-row" id="ov-stats"></div>
+    <div id="ov-alerts"></div>
+    <div class="gold-line"></div>
+    <div class="ov-grid" id="ov-grid"></div>
+  </div>
+
+  <!-- BRANCHES -->
+  <div class="page" id="page-branches">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="br_eyebrow">Branch Management</div>
+      <div class="page-title" data-i="br_title">Branches</div>
+      <div class="page-sub" data-i="br_sub">Manage analytics scores and staff per location</div>
+    </div>
+    <div class="branch-tabs" id="branch-tabs"></div>
+    <div id="branch-detail"></div>
+  </div>
+
+  <!-- STAFF -->
+  <div class="page" id="page-staff">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="st_eyebrow">Human Capital</div>
+      <div class="page-title" data-i="st_title">Staff</div>
+      <div class="page-sub" data-i="st_sub">Add, edit and assign employees to branches</div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" data-i="st_add">Add Employee</div>
+      <div id="staff-alert" class="alert"></div>
+      <div class="form-grid">
+        <div class="field"><label data-i="lbl_firstname">First Name</label><input id="f-vn" placeholder="Max"></div>
+        <div class="field"><label data-i="lbl_lastname">Last Name</label><input id="f-nn" placeholder="Mustermann"></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label data-i="lbl_dept">Department</label>
+          <select id="f-dept" onchange="updateRankOpts()">
+            <option value="" data-i="opt_select">Select…</option>
+            <option>Finance</option><option>Human Resources</option><option>Operations</option>
+            <option>Marketing</option><option>Research & Development</option><option>Sales</option><option>Legal</option>
+          </select>
+        </div>
+        <div class="field"><label data-i="lbl_rank">Rank</label>
+          <select id="f-rank" onchange="updateSpecOpts()"><option value="" data-i="opt_dept_first">Select department first</option></select>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="field"><label data-i="lbl_spec">Specialization</label><select id="f-spec"><option value="">–</option></select></div>
+        <div class="field"><label data-i="lbl_branch">Branch</label><select id="f-city"><option value="" data-i="opt_pool">Pool (unassigned)</option></select></div>
+      </div>
+      <button class="btn btn-gold" onclick="addStaff()" data-i="btn_save_emp">+ Save Employee</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span data-i="st_all">All Employees</span> <span id="staff-count" style="font-weight:400;color:var(--text3)"></span></div>
+      <div class="search-row">
+        <input id="sq" oninput="renderStaff()" data-placeholder-i="ph_search">
+        <select onchange="renderStaff()" id="sq-dept">
+          <option value="" data-i="opt_all_dept">All Departments</option>
+          <option>Finance</option><option>Human Resources</option><option>Operations</option>
+          <option>Marketing</option><option>Research & Development</option><option>Sales</option><option>Legal</option>
+        </select>
+        <select onchange="renderStaff()" id="sq-city"><option value="" data-i="opt_all_br">All Branches</option></select>
+      </div>
+      <div id="staff-list"></div>
+    </div>
+  </div>
+
+  <!-- RECOMMEND -->
+  <div class="page" id="page-recommend">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="rc_eyebrow">Strategic Deployment</div>
+      <div class="page-title" data-i="rc_title">Recommendations</div>
+      <div class="page-sub" data-i="rc_sub">Which departments are needed — based on analytics scores</div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" data-i="rc_select">Select Branch</div>
+      <div id="rec-tabs" class="branch-tabs" style="margin-bottom:0"></div>
+    </div>
+    <div id="rec-content"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="set_eyebrow">Configuration</div>
+      <div class="page-title" data-i="set_title">Settings</div>
+      <div class="page-sub" data-i="set_sub">Language, preferences and credits</div>
+    </div>
+
+    <div class="card">
+      <div class="settings-section">
+        <div class="settings-title" data-i="set_lang_title">Language</div>
+        <div class="lang-grid" id="lang-grid"></div>
+      </div>
+    </div>
+
+    <!-- CREDITS -->
+    <div class="card" style="margin-top:8px">
+      <div class="settings-title" data-i="set_credits_title">Credits & Developer</div>
+      <div class="credits-box">
+        <div class="discord-icon">
+          <!-- Discord SVG logo in gold style -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="#07080a">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="credits-label" data-i="credits_dev">Developer</div>
+          <div class="credits-name">spezi_saufer</div>
+        </div>
+        <div style="font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase" data-i="credits_reach">Reach out via Discord</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div class="page" id="page-changelog">
+    <div class="page-header">
+      <div class="page-eyebrow" data-i="cl_eyebrow">Release History</div>
+      <div class="page-title" data-i="cl_title">Changelog</div>
+      <div class="page-sub" data-i="cl_sub">All updates, fixes and new features</div>
+    </div>
+
+    <!-- ADD ENTRY FORM -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" data-i="cl_add">Add Entry</div>
+      <div class="form-grid">
+        <div class="field"><label data-i="cl_lbl_version">Version</label><input id="cl-ver" placeholder="v4.0"></div>
+        <div class="field"><label data-i="cl_lbl_date">Date</label><input id="cl-date" type="date"></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:10px">
+        <div class="field"><label data-i="cl_lbl_type">Type</label>
+          <select id="cl-type">
+            <option value="feature" data-i="cl_type_feature">✦ Feature</option>
+            <option value="fix" data-i="cl_type_fix">⚒ Fix</option>
+            <option value="improvement" data-i="cl_type_improvement">⚡ Improvement</option>
+            <option value="breaking" data-i="cl_type_breaking">⚠ Breaking Change</option>
+          </select>
+        </div>
+        <div class="field"><label data-i="cl_lbl_title">Title</label><input id="cl-ttl" placeholder="e.g. Smart Recommendations"></div>
+      </div>
+      <div class="field" style="margin-bottom:14px"><label data-i="cl_lbl_desc">Description</label>
+        <textarea id="cl-desc" rows="2" placeholder="Describe the change…" style="width:100%;padding:9px 14px;background:var(--black3);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);color:var(--text);font-family:'Montserrat',sans-serif;font-size:12px;resize:vertical;line-height:1.5"></textarea>
+      </div>
+      <button class="btn btn-gold" onclick="addChangelogEntry()"><span data-i="cl_btn_add">+ Add Entry</span></button>
+    </div>
+
+    <div id="changelog-list"></div>
+  </div>
+
+</main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEdit()">✕</button>
+    <div class="modal-title" data-i="modal_edit_title">Edit Employee</div>
+    <div class="form-grid">
+      <div class="field"><label data-i="lbl_firstname">First Name</label><input id="e-vn"></div>
+      <div class="field"><label data-i="lbl_lastname">Last Name</label><input id="e-nn"></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label data-i="lbl_dept">Department</label>
+        <select id="e-dept" onchange="updateEditRankOpts()">
+          <option value="">Select…</option>
+          <option>Finance</option><option>Human Resources</option><option>Operations</option>
+          <option>Marketing</option><option>Research & Development</option><option>Sales</option><option>Legal</option>
+        </select>
+      </div>
+      <div class="field"><label data-i="lbl_rank">Rank</label>
+        <select id="e-rank" onchange="updateEditSpecOpts()"><option value="">Select department first</option></select>
+      </div>
+    </div>
+    <div class="form-grid" style="margin-bottom:0">
+      <div class="field"><label data-i="lbl_spec">Specialization</label><select id="e-spec"><option value="">–</option></select></div>
+      <div class="field"><label data-i="lbl_branch">Branch</label><select id="e-city"><option value="">Pool</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEdit()" data-i="btn_cancel">Cancel</button>
+      <button class="btn btn-gold" onclick="saveEdit()" data-i="btn_save">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// TRANSLATIONS
+// ─────────────────────────────────────────────
+const LANGS = {
+  en: { flag:'🇬🇧', label:'English',
+    nav_overview:'Overview', nav_branches:'Branches', nav_staff:'Staff', nav_recommend:'Recommend', nav_settings:'Settings',
+    ov_eyebrow:'Executive Overview', ov_title:'Overview', ov_sub:'All branches & analytics at a glance',
+    br_eyebrow:'Branch Management', br_title:'Branches', br_sub:'Manage analytics scores and staff per location',
+    st_eyebrow:'Human Capital', st_title:'Staff', st_sub:'Add, edit and assign employees to branches',
+    st_add:'Add Employee', st_all:'All Employees',
+    rc_eyebrow:'Strategic Deployment', rc_title:'Recommendations', rc_sub:'Which departments are needed — based on analytics scores',
+    rc_select:'Select Branch',
+    set_eyebrow:'Configuration', set_title:'Settings', set_sub:'Language, preferences and credits',
+    set_lang_title:'Language', set_credits_title:'Credits & Developer',
+    lbl_firstname:'First Name', lbl_lastname:'Last Name', lbl_dept:'Department', lbl_rank:'Rank', lbl_spec:'Specialization', lbl_branch:'Branch',
+    opt_select:'Select…', opt_dept_first:'Select department first', opt_pool:'Pool (unassigned)', opt_all_dept:'All Departments', opt_all_br:'All Branches',
+    btn_save_emp:'+ Save Employee', btn_cancel:'Cancel', btn_save:'Save Changes',
+    modal_edit_title:'Edit Employee',
+    ph_search:'Search name, rank, spec…',
+    stat_staff:'Staff', stat_branches:'Branches', stat_pool:'In Pool', stat_avg:'Avg / Branch',
+    hq_banner:'★ Headquarters — New York City · Always open',
+    btn_close:'Close', btn_open:'Open', btn_critical:'Critical', btn_improving:'Improving',
+    rec_sorted:'Departments sorted by urgency · Only pool staff shown',
+    rec_already:'already in', rec_avail:'Pool available',
+    no_staff_pool:'No {dept} staff available in pool.',
+    rec_all_good:'All analytics in {branch} are strong (≥ 70). No action needed.',
+    footer_storage:'Data stored locally',
+    credits_dev:'Developer', credits_reach:'Reach out via Discord',
+    empty_branch:'No staff assigned', empty_staff:'No employees found',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Assign',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  de: { flag:'🇩🇪', label:'Deutsch',
+    nav_overview:'Übersicht', nav_branches:'Branches', nav_staff:'Personal', nav_recommend:'Empfehlung', nav_settings:'Einstellungen',
+    ov_eyebrow:'Executive Overview', ov_title:'Übersicht', ov_sub:'Alle Branches & Analytics auf einen Blick',
+    br_eyebrow:'Branch Management', br_title:'Branches', br_sub:'Analytics-Scores und Personal pro Standort verwalten',
+    st_eyebrow:'Human Capital', st_title:'Personal', st_sub:'Mitarbeiter erfassen, bearbeiten und Branches zuteilen',
+    st_add:'Mitarbeiter hinzufügen', st_all:'Alle Mitarbeiter',
+    rc_eyebrow:'Strategischer Einsatz', rc_title:'Empfehlung', rc_sub:'Welche Departments fehlen — basierend auf Analytics-Scores',
+    rc_select:'Branch auswählen',
+    set_eyebrow:'Konfiguration', set_title:'Einstellungen', set_sub:'Sprache, Einstellungen und Credits',
+    set_lang_title:'Sprache', set_credits_title:'Credits & Entwickler',
+    lbl_firstname:'Vorname', lbl_lastname:'Nachname', lbl_dept:'Department', lbl_rank:'Rang', lbl_spec:'Spezialisierung', lbl_branch:'Branch',
+    opt_select:'Wählen…', opt_dept_first:'Erst Department wählen', opt_pool:'Pool (nicht zugeteilt)', opt_all_dept:'Alle Departments', opt_all_br:'Alle Branches',
+    btn_save_emp:'+ Mitarbeiter speichern', btn_cancel:'Abbrechen', btn_save:'Änderungen speichern',
+    modal_edit_title:'Mitarbeiter bearbeiten',
+    ph_search:'Name, Rang, Spezialisierung suchen…',
+    stat_staff:'Mitarbeiter', stat_branches:'Branches', stat_pool:'Im Pool', stat_avg:'Ø / Branch',
+    hq_banner:'★ Hauptsitz — New York City · Immer geöffnet',
+    btn_close:'Schließen', btn_open:'Öffnen', btn_critical:'Kritisch', btn_improving:'Verbesserungswürdig',
+    rec_sorted:'Departments nach Dringlichkeit · Nur Pool-Personal',
+    rec_already:'bereits in', rec_avail:'Pool verfügbar',
+    no_staff_pool:'Kein {dept}-Personal im Pool verfügbar.',
+    rec_all_good:'Alle Analytics in {branch} sind stark (≥ 70). Kein Handlungsbedarf.',
+    footer_storage:'Daten lokal gespeichert',
+    credits_dev:'Entwickler', credits_reach:'Über Discord erreichbar',
+    empty_branch:'Kein Personal zugeteilt', empty_staff:'Keine Mitarbeiter gefunden',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Zuweisen',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  fr: { flag:'🇫🇷', label:'Français',
+    nav_overview:'Aperçu', nav_branches:'Branches', nav_staff:'Personnel', nav_recommend:'Recommandation', nav_settings:'Paramètres',
+    ov_eyebrow:'Vue Exécutive', ov_title:'Aperçu', ov_sub:'Toutes les branches & analyses en un coup d\'œil',
+    br_eyebrow:'Gestion des Branches', br_title:'Branches', br_sub:'Gérer les scores et le personnel par site',
+    st_eyebrow:'Capital Humain', st_title:'Personnel', st_sub:'Ajouter, modifier et affecter des employés aux branches',
+    st_add:'Ajouter un Employé', st_all:'Tous les Employés',
+    rc_eyebrow:'Déploiement Stratégique', rc_title:'Recommandations', rc_sub:'Quels départements sont nécessaires — selon les scores',
+    rc_select:'Sélectionner une Branche',
+    set_eyebrow:'Configuration', set_title:'Paramètres', set_sub:'Langue, préférences et crédits',
+    set_lang_title:'Langue', set_credits_title:'Crédits & Développeur',
+    lbl_firstname:'Prénom', lbl_lastname:'Nom', lbl_dept:'Département', lbl_rank:'Rang', lbl_spec:'Spécialisation', lbl_branch:'Branche',
+    opt_select:'Choisir…', opt_dept_first:'Choisir d\'abord le département', opt_pool:'Pool (non affecté)', opt_all_dept:'Tous les Dép.', opt_all_br:'Toutes les Branches',
+    btn_save_emp:'+ Sauvegarder', btn_cancel:'Annuler', btn_save:'Enregistrer',
+    modal_edit_title:'Modifier l\'employé',
+    ph_search:'Rechercher nom, rang…',
+    stat_staff:'Employés', stat_branches:'Branches', stat_pool:'En Pool', stat_avg:'Moy / Branche',
+    hq_banner:'★ Siège — New York City · Toujours ouvert',
+    btn_close:'Fermer', btn_open:'Ouvrir', btn_critical:'Critique', btn_improving:'À améliorer',
+    rec_sorted:'Départements par urgence · Personnel pool uniquement',
+    rec_already:'déjà à', rec_avail:'Pool disponible',
+    no_staff_pool:'Aucun personnel {dept} disponible dans le pool.',
+    rec_all_good:'Toutes les analyses de {branch} sont solides (≥ 70).',
+    footer_storage:'Données stockées localement',
+    credits_dev:'Développeur', credits_reach:'Contacter via Discord',
+    empty_branch:'Aucun personnel affecté', empty_staff:'Aucun employé trouvé',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Affecter',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  pl: { flag:'🇵🇱', label:'Polski',
+    nav_overview:'Przegląd', nav_branches:'Oddziały', nav_staff:'Personel', nav_recommend:'Rekomendacje', nav_settings:'Ustawienia',
+    ov_eyebrow:'Przegląd Zarządu', ov_title:'Przegląd', ov_sub:'Wszystkie oddziały i analizy w jednym miejscu',
+    br_eyebrow:'Zarządzanie Oddziałami', br_title:'Oddziały', br_sub:'Zarządzaj wynikami i personelem w oddziałach',
+    st_eyebrow:'Kapitał Ludzki', st_title:'Personel', st_sub:'Dodaj, edytuj i przypisuj pracowników do oddziałów',
+    st_add:'Dodaj Pracownika', st_all:'Wszyscy Pracownicy',
+    rc_eyebrow:'Rozmieszczenie Strategiczne', rc_title:'Rekomendacje', rc_sub:'Które działy są potrzebne — na podstawie wyników',
+    rc_select:'Wybierz Oddział',
+    set_eyebrow:'Konfiguracja', set_title:'Ustawienia', set_sub:'Język, preferencje i twórcy',
+    set_lang_title:'Język', set_credits_title:'Twórcy',
+    lbl_firstname:'Imię', lbl_lastname:'Nazwisko', lbl_dept:'Dział', lbl_rank:'Stopień', lbl_spec:'Specjalizacja', lbl_branch:'Oddział',
+    opt_select:'Wybierz…', opt_dept_first:'Najpierw wybierz dział', opt_pool:'Pula (nieprzypisany)', opt_all_dept:'Wszystkie Działy', opt_all_br:'Wszystkie Oddziały',
+    btn_save_emp:'+ Zapisz Pracownika', btn_cancel:'Anuluj', btn_save:'Zapisz Zmiany',
+    modal_edit_title:'Edytuj Pracownika',
+    ph_search:'Szukaj imię, stopień…',
+    stat_staff:'Pracownicy', stat_branches:'Oddziały', stat_pool:'W Puli', stat_avg:'Śr / Oddział',
+    hq_banner:'★ Siedziba — Nowy Jork · Zawsze otwarte',
+    btn_close:'Zamknij', btn_open:'Otwórz', btn_critical:'Krytyczny', btn_improving:'Do poprawy',
+    rec_sorted:'Działy wg pilności · Tylko personel z puli',
+    rec_already:'już w', rec_avail:'Pula dostępna',
+    no_staff_pool:'Brak personelu {dept} w puli.',
+    rec_all_good:'Wszystkie analizy w {branch} są silne (≥ 70).',
+    footer_storage:'Dane przechowywane lokalnie',
+    credits_dev:'Deweloper', credits_reach:'Kontakt przez Discord',
+    empty_branch:'Brak przypisanego personelu', empty_staff:'Nie znaleziono pracowników',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Przypisz',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  es: { flag:'🇪🇸', label:'Español',
+    nav_overview:'Resumen', nav_branches:'Sucursales', nav_staff:'Personal', nav_recommend:'Recomendación', nav_settings:'Ajustes',
+    ov_eyebrow:'Resumen Ejecutivo', ov_title:'Resumen', ov_sub:'Todas las sucursales y análisis de un vistazo',
+    br_eyebrow:'Gestión de Sucursales', br_title:'Sucursales', br_sub:'Gestionar puntuaciones y personal por ubicación',
+    st_eyebrow:'Capital Humano', st_title:'Personal', st_sub:'Añadir, editar y asignar empleados a sucursales',
+    st_add:'Añadir Empleado', st_all:'Todos los Empleados',
+    rc_eyebrow:'Despliegue Estratégico', rc_title:'Recomendaciones', rc_sub:'Qué departamentos se necesitan — según las puntuaciones',
+    rc_select:'Seleccionar Sucursal',
+    set_eyebrow:'Configuración', set_title:'Ajustes', set_sub:'Idioma, preferencias y créditos',
+    set_lang_title:'Idioma', set_credits_title:'Créditos y Desarrollador',
+    lbl_firstname:'Nombre', lbl_lastname:'Apellido', lbl_dept:'Departamento', lbl_rank:'Rango', lbl_spec:'Especialización', lbl_branch:'Sucursal',
+    opt_select:'Seleccionar…', opt_dept_first:'Primero selecciona dept.', opt_pool:'Pool (sin asignar)', opt_all_dept:'Todos los Dep.', opt_all_br:'Todas las Sucursales',
+    btn_save_emp:'+ Guardar', btn_cancel:'Cancelar', btn_save:'Guardar Cambios',
+    modal_edit_title:'Editar Empleado',
+    ph_search:'Buscar nombre, rango…',
+    stat_staff:'Empleados', stat_branches:'Sucursales', stat_pool:'En Pool', stat_avg:'Prom / Suc.',
+    hq_banner:'★ Sede — Nueva York · Siempre abierto',
+    btn_close:'Cerrar', btn_open:'Abrir', btn_critical:'Crítico', btn_improving:'Mejorable',
+    rec_sorted:'Departamentos por urgencia · Solo personal del pool',
+    rec_already:'ya en', rec_avail:'Pool disponible',
+    no_staff_pool:'No hay personal de {dept} en el pool.',
+    rec_all_good:'Todos los análisis en {branch} son sólidos (≥ 70).',
+    footer_storage:'Datos almacenados localmente',
+    credits_dev:'Desarrollador', credits_reach:'Contactar por Discord',
+    empty_branch:'Sin personal asignado', empty_staff:'No se encontraron empleados',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Asignar',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  it: { flag:'🇮🇹', label:'Italiano',
+    nav_overview:'Panoramica', nav_branches:'Filiali', nav_staff:'Personale', nav_recommend:'Raccomandazione', nav_settings:'Impostazioni',
+    ov_eyebrow:'Panoramica Esecutiva', ov_title:'Panoramica', ov_sub:'Tutte le filiali e le analisi in un colpo d\'occhio',
+    br_eyebrow:'Gestione Filiali', br_title:'Filiali', br_sub:'Gestisci punteggi e personale per sede',
+    st_eyebrow:'Capitale Umano', st_title:'Personale', st_sub:'Aggiungi, modifica e assegna dipendenti alle filiali',
+    st_add:'Aggiungi Dipendente', st_all:'Tutti i Dipendenti',
+    rc_eyebrow:'Dispiegamento Strategico', rc_title:'Raccomandazioni', rc_sub:'Quali reparti mancano — in base ai punteggi',
+    rc_select:'Seleziona Filiale',
+    set_eyebrow:'Configurazione', set_title:'Impostazioni', set_sub:'Lingua, preferenze e crediti',
+    set_lang_title:'Lingua', set_credits_title:'Crediti & Sviluppatore',
+    lbl_firstname:'Nome', lbl_lastname:'Cognome', lbl_dept:'Reparto', lbl_rank:'Rango', lbl_spec:'Specializzazione', lbl_branch:'Filiale',
+    opt_select:'Seleziona…', opt_dept_first:'Prima seleziona reparto', opt_pool:'Pool (non assegnato)', opt_all_dept:'Tutti i Reparti', opt_all_br:'Tutte le Filiali',
+    btn_save_emp:'+ Salva Dipendente', btn_cancel:'Annulla', btn_save:'Salva Modifiche',
+    modal_edit_title:'Modifica Dipendente',
+    ph_search:'Cerca nome, rango…',
+    stat_staff:'Dipendenti', stat_branches:'Filiali', stat_pool:'Nel Pool', stat_avg:'Media / Filiale',
+    hq_banner:'★ Sede — New York City · Sempre aperta',
+    btn_close:'Chiudi', btn_open:'Apri', btn_critical:'Critico', btn_improving:'Da migliorare',
+    rec_sorted:'Reparti per urgenza · Solo personale del pool',
+    rec_already:'già in', rec_avail:'Pool disponibile',
+    no_staff_pool:'Nessun personale {dept} disponibile nel pool.',
+    rec_all_good:'Tutte le analisi in {branch} sono solide (≥ 70).',
+    footer_storage:'Dati memorizzati localmente',
+    credits_dev:'Sviluppatore', credits_reach:'Contatta via Discord',
+    empty_branch:'Nessun personale assegnato', empty_staff:'Nessun dipendente trovato',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Assegna',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  ru: { flag:'🇷🇺', label:'Русский',
+    nav_overview:'Обзор', nav_branches:'Филиалы', nav_staff:'Персонал', nav_recommend:'Рекомендации', nav_settings:'Настройки',
+    ov_eyebrow:'Исполнительный Обзор', ov_title:'Обзор', ov_sub:'Все филиалы и аналитика с первого взгляда',
+    br_eyebrow:'Управление Филиалами', br_title:'Филиалы', br_sub:'Управляйте показателями и персоналом по филиалам',
+    st_eyebrow:'Человеческий Капитал', st_title:'Персонал', st_sub:'Добавляйте, редактируйте и назначайте сотрудников',
+    st_add:'Добавить сотрудника', st_all:'Все сотрудники',
+    rc_eyebrow:'Стратегическое Развёртывание', rc_title:'Рекомендации', rc_sub:'Какие отделы нужны — на основе показателей',
+    rc_select:'Выбрать филиал',
+    set_eyebrow:'Конфигурация', set_title:'Настройки', set_sub:'Язык, настройки и разработчики',
+    set_lang_title:'Язык', set_credits_title:'Разработчики',
+    lbl_firstname:'Имя', lbl_lastname:'Фамилия', lbl_dept:'Отдел', lbl_rank:'Ранг', lbl_spec:'Специализация', lbl_branch:'Филиал',
+    opt_select:'Выбрать…', opt_dept_first:'Сначала выберите отдел', opt_pool:'Пул (не назначен)', opt_all_dept:'Все отделы', opt_all_br:'Все филиалы',
+    btn_save_emp:'+ Сохранить', btn_cancel:'Отмена', btn_save:'Сохранить изменения',
+    modal_edit_title:'Редактировать сотрудника',
+    ph_search:'Поиск по имени, рангу…',
+    stat_staff:'Сотрудники', stat_branches:'Филиалы', stat_pool:'В пуле', stat_avg:'Ср / Филиал',
+    hq_banner:'★ Штаб-квартира — Нью-Йорк · Всегда открыта',
+    btn_close:'Закрыть', btn_open:'Открыть', btn_critical:'Критично', btn_improving:'Требует улучшения',
+    rec_sorted:'Отделы по срочности · Только персонал из пула',
+    rec_already:'уже в', rec_avail:'Пул доступен',
+    no_staff_pool:'Нет персонала {dept} в пуле.',
+    rec_all_good:'Все показатели {branch} высокие (≥ 70).',
+    footer_storage:'Данные хранятся локально',
+    credits_dev:'Разработчик', credits_reach:'Связь через Discord',
+    empty_branch:'Персонал не назначен', empty_staff:'Сотрудники не найдены',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Назначить',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+  da: { flag:'🇩🇰', label:'Dansk',
+    nav_overview:'Oversigt', nav_branches:'Filialer', nav_staff:'Personale', nav_recommend:'Anbefaling', nav_settings:'Indstillinger',
+    ov_eyebrow:'Ledelsesoversigt', ov_title:'Oversigt', ov_sub:'Alle filialer og analyser på ét overblik',
+    br_eyebrow:'Filialadministration', br_title:'Filialer', br_sub:'Administrer analyser og personale per filial',
+    st_eyebrow:'Menneskelig Kapital', st_title:'Personale', st_sub:'Tilføj, rediger og tildel medarbejdere til filialer',
+    st_add:'Tilføj Medarbejder', st_all:'Alle Medarbejdere',
+    rc_eyebrow:'Strategisk Tildeling', rc_title:'Anbefalinger', rc_sub:'Hvilke afdelinger mangler — baseret på analyser',
+    rc_select:'Vælg Filial',
+    set_eyebrow:'Konfiguration', set_title:'Indstillinger', set_sub:'Sprog, præferencer og credits',
+    set_lang_title:'Sprog', set_credits_title:'Credits & Udvikler',
+    lbl_firstname:'Fornavn', lbl_lastname:'Efternavn', lbl_dept:'Afdeling', lbl_rank:'Rang', lbl_spec:'Specialisering', lbl_branch:'Filial',
+    opt_select:'Vælg…', opt_dept_first:'Vælg afdeling først', opt_pool:'Pulje (ikke tildelt)', opt_all_dept:'Alle Afdelinger', opt_all_br:'Alle Filialer',
+    btn_save_emp:'+ Gem Medarbejder', btn_cancel:'Annuller', btn_save:'Gem Ændringer',
+    modal_edit_title:'Rediger Medarbejder',
+    ph_search:'Søg navn, rang…',
+    stat_staff:'Medarbejdere', stat_branches:'Filialer', stat_pool:'I Pulje', stat_avg:'Gns / Filial',
+    hq_banner:'★ Hovedkvarter — New York City · Altid åben',
+    btn_close:'Luk', btn_open:'Åbn', btn_critical:'Kritisk', btn_improving:'Kan forbedres',
+    rec_sorted:'Afdelinger efter haster · Kun puljepersonale',
+    rec_already:'allerede i', rec_avail:'Pulje tilgængelig',
+    no_staff_pool:'Intet {dept}-personale tilgængeligt i puljen.',
+    rec_all_good:'Alle analyser i {branch} er stærke (≥ 70).',
+    footer_storage:'Data gemt lokalt',
+    credits_dev:'Udvikler', credits_reach:'Kontakt via Discord',
+    empty_branch:'Intet personale tildelt', empty_staff:'Ingen medarbejdere fundet',
+    rank_chief:'Chief', rank_evp:'Executive VP', rank_head:'Head', rank_advisor:'Advisor', rank_consultant:'Consultant',
+    assign:'→ Tildel',
+    sb_sub:'Execute · Analyze · Lead',
+  },
+};
+let curLang = 'en';
+function t(key, vars) {
+  let s = (LANGS[curLang]||LANGS.en)[key] || (LANGS.en[key]) || key;
+  if (vars) Object.entries(vars).forEach(([k,v]) => s = s.replace(`{${k}}`,v));
+  return s;
+}
+function applyLang() {
+  document.querySelectorAll('[data-i]').forEach(el => { const v = t(el.dataset.i); if (v) el.textContent = v; });
+  document.querySelectorAll('[data-placeholder-i]').forEach(el => { el.placeholder = t(el.dataset.placeholderI); });
+  document.getElementById('sb-sub').textContent = t('sb_sub');
+  document.querySelectorAll('#lang-grid .lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === curLang));
+  try { localStorage.setItem('tc-lang', curLang); } catch(e){}
+}
+function setLang(lang) { curLang = lang; applyLang(); refresh(); }
+function buildLangGrid() {
+  document.getElementById('lang-grid').innerHTML = Object.entries(LANGS).map(([code,l]) =>
+    `<button class="lang-btn${code===curLang?' active':''}" data-lang="${code}" onclick="setLang('${code}')">
+      <span class="lang-flag">${l.flag}</span> ${l.label}
+    </button>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// GAME DATA
+// ─────────────────────────────────────────────
+const CRITERIA_DEPT = {
+  'Innovation':['Research & Development'],
+  'Brand Awareness':['Marketing'],
+  'Market Reputation':['Research & Development','Marketing','Sales'],
+  'Morale':['Finance','Human Resources','Marketing','Sales'],
+  'Turnover':['Human Resources'],
+  'Research Progress':['Research & Development'],
+  'Efficiency':['Finance','Human Resources','Operations','Marketing','Research & Development','Sales','Legal'],
+  'Risk Exposure':['Finance','Operations','Legal'],
+  'Compliance':['Finance','Human Resources','Operations','Legal'],
+  'Contract Quality':['Operations','Sales','Legal']
+};
+const DEPT_BADGE = {
+  'Finance':'b-blue','Human Resources':'b-pur','Operations':'b-teal',
+  'Marketing':'b-or','Research & Development':'b-grn','Sales':'b-amb','Legal':'b-gray'
+};
+function getRanks(dept) {
+  if (dept==='Legal') return ['Chief Legal Officer','General Counsel','Head','Attorney','Paralegal'];
+  const d = dept==='Research & Development'?'R&D':dept;
+  return [`Chief ${dept} Officer`,`Executive VP of ${d}`,'Head','Advisor','Consultant'];
+}
+// Rank tier for smart recommendations
+function getRankTier(rank) {
+  if (rank.startsWith('Chief')) return 'chief';
+  if (rank.startsWith('Executive VP')||rank==='General Counsel') return 'evp';
+  if (rank==='Head') return 'head';
+  if (rank==='Advisor'||rank==='Attorney') return 'advisor';
+  return 'consultant';
+}
+const TIER_ORDER = ['chief','evp','head','advisor','consultant'];
+const TIER_LABELS = { chief:'rank_chief', evp:'rank_evp', head:'rank_head', advisor:'rank_advisor', consultant:'rank_consultant' };
+const SPECS = {
+  'Finance':{'Head':['Financial Operations','Financial Planning & Analysis','Investor Relations','Risk Management']},
+  'Human Resources':{'Head':['Talent Management','Employee Relations','Organizational Development','Diversity, Equity & Inclusion']},
+  'Operations':{'Head':['Business Operations','Quality Assurance','Logistics & Supply Chain','Safety & Compliance']},
+  'Marketing':{'Head':['Public Relations','Media Strategy','Digital Marketing','Customer Experience']},
+  'Research & Development':{'Head':['Product Development','Innovation & Technology','Engineering','Material Science']},
+  'Sales':{'Head':['Sales Operations','Global Accounts','Revenue Strategy','Account Management']},
+  'Legal':{'Head':['Regulatory Compliance','Mergers & Acquisitions','Employment & Labor Law','Contracts'],
+           'Attorney':['Regulatory Compliance','Mergers & Acquisitions','Employment & Labor Law','Contracts'],
+           'Paralegal':['Regulatory Compliance','Mergers & Acquisitions','Employment & Labor Law','Contracts']}
+};
+['Finance','Human Resources','Operations','Marketing','Research & Development','Sales'].forEach(d=>{SPECS[d]['Advisor']=SPECS[d]['Head'];SPECS[d]['Consultant']=SPECS[d]['Head'];});
+
+const DEFAULT_BRANCHES=[
+  {id:'nyc',name:'New York City',hq:true},
+  {id:'chi',name:'Chicago',hq:false},
+  {id:'dal',name:'Dallas',hq:false},
+  {id:'den',name:'Denver',hq:false},
+  {id:'lax',name:'Los Angeles',hq:false},
+  {id:'atl',name:'Atlanta',hq:false},
+  {id:'sea',name:'Seattle',hq:false},
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let db = {branches:[],staff:[]};
+let selBranch='nyc', recBranch='nyc', activePageId='overview', editId=null, recTimer=null;
+
+function persist() { try{localStorage.setItem('tc-ceo-v2',JSON.stringify(db));}catch(e){} }
+function hydrate() {
+  try{const r=localStorage.getItem('tc-ceo-v2');if(r)db=JSON.parse(r);}catch(e){}
+  try{const l=localStorage.getItem('tc-lang');if(l&&LANGS[l])curLang=l;}catch(e){}
+  DEFAULT_BRANCHES.forEach(def=>{
+    if(!db.branches.find(b=>b.id===def.id)){
+      const sc={};Object.keys(CRITERIA_DEPT).forEach(k=>sc[k]=50);
+      db.branches.push({...def,scores:sc,open:def.hq});
+    }
+  });
+  persist(); buildLangGrid(); applyLang(); refresh();
+}
+
+const scoreColor = s => s<=33?'#c0392b':s<=66?'#c87941':'#4a9e6a';
+const scoreBadge = s => s<=33?'b-red':s<=66?'b-amb':'b-grn';
+const initials   = (v,n) => ((v||'')[0]||'').toUpperCase()+((n||'')[0]||'').toUpperCase();
+const opens      = () => db.branches.filter(b=>b.open);
+
+// ─────────────────────────────────────────────
+// NAV
+// ─────────────────────────────────────────────
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  activePageId=id;
+  if(id==='overview')  renderOverview();
+  if(id==='branches')  renderBranches();
+  if(id==='staff')     {fillCitySelects();renderStaff();}
+  if(id==='recommend') renderRecommend();
+  if(id==='settings')  {buildLangGrid();applyLang();}
+}
+
+function fillCitySelects() {
+  const opts=opens().map(b=>`<option value="${b.id}">${b.name}${b.hq?' (HQ)':''}</option>`).join('');
+  const fc=document.getElementById('f-city');if(fc)fc.innerHTML=`<option value="">${t('opt_pool')}</option>`+opts;
+  const sq=document.getElementById('sq-city');if(sq)sq.innerHTML=`<option value="">${t('opt_all_br')}</option><option value="__pool__">Pool</option>`+opts;
+  const ec=document.getElementById('e-city');if(ec)ec.innerHTML=`<option value="">Pool</option>`+opts;
+}
+
+// ─────────────────────────────────────────────
+// OVERVIEW
+// ─────────────────────────────────────────────
+function renderOverview() {
+  const ob=opens(),total=db.staff.length,pool=db.staff.filter(s=>!s.branchId).length;
+  document.getElementById('ov-stats').innerHTML=[
+    [t('stat_staff'),total],[t('stat_branches'),`${ob.length}/${db.branches.length}`],
+    [t('stat_pool'),pool],[t('stat_avg'),ob.length?Math.round((total-pool)/ob.length):0]
+  ].map(([l,v])=>`<div class="stat-card"><div class="stat-label">${l}</div><div class="stat-value">${v}</div></div>`).join('');
+  const crits=[];
+  ob.forEach(b=>{const w=Object.entries(b.scores).filter(([,v])=>v<=33);if(w.length)crits.push(`<strong>${b.name}:</strong> ${w.map(([k,v])=>`${k} (${v})`).join(', ')}`);});
+  document.getElementById('ov-alerts').innerHTML=crits.length?`<div class="alert a-err" style="display:block;margin-bottom:1.5rem">⚠ ${crits.join(' · ')}</div>`:'';
+  document.getElementById('ov-grid').innerHTML=ob.map(b=>{
+    const n=db.staff.filter(s=>s.branchId===b.id).length;
+    const rows=Object.entries(CRITERIA_DEPT).map(([crit])=>{
+      const sc=b.scores[crit]??50,col=scoreColor(sc);
+      return `<div class="mini-row"><div class="mini-name">${crit}</div><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${sc}%;background:${col}"></div></div><div class="mini-val" style="color:${col}">${sc}</div></div>`;
+    }).join('');
+    return `<div class="ov-card"><div class="ov-card-name">${b.hq?'🏛 ':'🏢 '}${b.name}${b.hq?` <span class="badge b-gold">HQ</span>`:''}<span style="margin-left:auto;font-size:10px;color:var(--text3);font-family:'Montserrat',sans-serif;font-weight:500">${n}</span></div>${rows}</div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// BRANCHES
+// ─────────────────────────────────────────────
+function renderBranches() {
+  if(!db.branches.find(b=>b.id===selBranch))selBranch=db.branches[0].id;
+  document.getElementById('branch-tabs').innerHTML=db.branches.map(b=>
+    `<button class="branch-tab${b.id===selBranch?' active':''}${b.hq?' hq':''}${!b.open?' closed':''}" onclick="selectBranch('${b.id}')">
+      ${b.hq?'🏛 ':''}${b.name}${!b.open?' 🔒':''}
+    </button>`).join('');
+  renderBranchDetail();
+}
+function selectBranch(id){selBranch=id;renderBranches();}
+
+function renderBranchDetail() {
+  const b=db.branches.find(x=>x.id===selBranch);
+  if(!b){document.getElementById('branch-detail').innerHTML='';return;}
+  const staffHere=db.staff.filter(s=>s.branchId===b.id);
+  const hqBanner=b.hq?`<div class="hq-banner">${t('hq_banner')}</div>`:'';
+  const toggleBtn=b.hq?'':(b.open
+    ?`<button class="btn btn-danger btn-sm" onclick="toggleBranch('${b.id}')">${t('btn_close')}</button>`
+    :`<button class="btn btn-gold btn-sm" onclick="toggleBranch('${b.id}')">${t('btn_open')}</button>`);
+  const critHtml=Object.entries(CRITERIA_DEPT).map(([crit,depts])=>{
+    const sc=b.scores[crit]??50,col=scoreColor(sc);
+    const chips=depts.map(d=>`<span class="dept-chip">${d}</span>`).join('');
+    return `<div class="crit-row">
+      <div class="crit-name">${crit}</div>
+      <div class="crit-bar"><div class="crit-fill" id="sf-${b.id}-${crit.replace(/[\s&]/g,'_')}" style="width:${sc}%;background:${col}"></div></div>
+      <div class="crit-val" id="sv-${b.id}-${crit.replace(/[\s&]/g,'_')}" style="color:${col}">${sc}</div>
+      <input type="range" class="crit-slider" min="0" max="100" value="${sc}" step="1" oninput="handleScore('${b.id}','${crit}',+this.value)">
+      <div class="dept-chips">${chips}</div>
+    </div>`;
+  }).join('');
+  const weak=Object.entries(b.scores).filter(([,v])=>v<=33).map(([k])=>k);
+  const warnHtml=weak.length?`<div class="alert a-err" style="display:block;margin-bottom:16px">⚠ ${t('btn_critical')}: ${weak.join(', ')}</div>`:'';
+  const byDept={};staffHere.forEach(s=>{if(!byDept[s.dept])byDept[s.dept]=[];byDept[s.dept].push(s);});
+  const staffHtml=Object.keys(byDept).length
+    ?Object.entries(byDept).map(([dept,members])=>`
+      <div class="dept-section">
+        <div class="dept-header"><span class="badge ${DEPT_BADGE[dept]||'b-gray'}">${dept}</span><span style="font-size:10px;color:var(--text3);letter-spacing:0.08em;margin-left:4px">${members.length}×</span></div>
+        <div class="member-grid">${members.map(m=>`<div class="member-card"><div class="avatar">${initials(m.vn,m.nn)}</div><div><div class="staff-name">${m.vn} ${m.nn}</div><div class="staff-meta">${m.rank}${m.spec?' · '+m.spec:''}</div></div></div>`).join('')}</div>
+      </div>`).join('')
+    :`<div class="empty">${t('empty_branch')}</div>`;
+  document.getElementById('branch-detail').innerHTML=`
+    <div class="card" style="margin-bottom:14px">${hqBanner}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="margin:0">${b.name} — Analytics</div>${toggleBtn}
+      </div>${warnHtml}${critHtml}
+    </div>
+    <div class="card"><div class="card-title">${t('nav_staff')} — ${b.name} (${staffHere.length})</div>${staffHtml}</div>`;
+}
+
+function handleScore(bid,crit,val){
+  const b=db.branches.find(x=>x.id===bid);if(b)b.scores[crit]=val;
+  const key=crit.replace(/[\s&]/g,'_'),col=scoreColor(val);
+  const sf=document.getElementById(`sf-${bid}-${key}`),sv=document.getElementById(`sv-${bid}-${key}`);
+  if(sf){sf.style.width=val+'%';sf.style.background=col;}
+  if(sv){sv.textContent=val;sv.style.color=col;}
+  persist();
+  if(activePageId==='recommend'&&recBranch===bid){clearTimeout(recTimer);recTimer=setTimeout(renderRecContent,80);}
+  if(activePageId==='overview')renderOverview();
+}
+function toggleBranch(id){
+  const b=db.branches.find(x=>x.id===id);if(!b||b.hq)return;
+  if(b.open&&!confirm(`"${b.name}" — ${t('btn_close')}?`))return;
+  if(b.open)db.staff.filter(s=>s.branchId===id).forEach(s=>s.branchId='');
+  b.open=!b.open;persist();renderBranches();renderOverview();
+}
+
+// ─────────────────────────────────────────────
+// STAFF
+// ─────────────────────────────────────────────
+function updateRankOpts(){
+  const dept=document.getElementById('f-dept').value;
+  const rs=document.getElementById('f-rank'),ss=document.getElementById('f-spec');
+  if(!dept){rs.innerHTML=`<option value="">${t('opt_dept_first')}</option>`;ss.innerHTML='<option value="">–</option>';return;}
+  rs.innerHTML=getRanks(dept).map(r=>`<option>${r}</option>`).join('');updateSpecOpts();
+}
+function updateSpecOpts(){
+  const dept=document.getElementById('f-dept').value,rank=document.getElementById('f-rank').value;
+  const ss=document.getElementById('f-spec');
+  let base=null;
+  if(['Head','Advisor','Consultant','Attorney','Paralegal'].includes(rank))base=rank;
+  const specs=base&&SPECS[dept]&&SPECS[dept][base];
+  ss.innerHTML=specs?specs.map(s=>`<option>${s}</option>`).join(''):'<option value="">–</option>';
+}
+function addStaff(){
+  const vn=document.getElementById('f-vn').value.trim(),nn=document.getElementById('f-nn').value.trim();
+  const dept=document.getElementById('f-dept').value,rank=document.getElementById('f-rank').value;
+  const spec=document.getElementById('f-spec').value,branchId=document.getElementById('f-city').value;
+  if(!vn||!nn||!dept||!rank){showSA('!','a-err');return;}
+  db.staff.push({id:'s'+Date.now()+Math.random().toString(36).slice(2,4),vn,nn,dept,rank,spec,branchId});
+  ['f-vn','f-nn'].forEach(id=>document.getElementById(id).value='');
+  ['f-dept','f-city'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-rank').innerHTML=`<option value="">${t('opt_dept_first')}</option>`;
+  document.getElementById('f-spec').innerHTML='<option value="">–</option>';
+  persist();fillCitySelects();renderStaff();renderOverview();
+  showSA(t('btn_save_emp'),'a-ok');
+}
+function showSA(msg,cls){
+  const el=document.getElementById('staff-alert');
+  el.textContent=msg;el.className='alert '+cls;el.style.display='block';
+  setTimeout(()=>el.style.display='none',3000);
+}
+function renderStaff(){
+  const q=(document.getElementById('sq')?.value||'').toLowerCase();
+  const df=document.getElementById('sq-dept')?.value||'';
+  const cf=document.getElementById('sq-city')?.value||'';
+  const filtered=db.staff.filter(s=>{
+    const txt=(s.vn+' '+s.nn+' '+(s.dept||'')+' '+(s.rank||'')+' '+(s.spec||'')).toLowerCase();
+    const cm=cf===''||(cf==='__pool__'?!s.branchId:s.branchId===cf);
+    return(!q||txt.includes(q))&&(!df||s.dept===df)&&cm;
+  });
+  document.getElementById('staff-count').textContent=`(${filtered.length}/${db.staff.length})`;
+  const el=document.getElementById('staff-list');
+  if(!filtered.length){el.innerHTML=`<div class="empty">${t('empty_staff')}</div>`;return;}
+  const bOpts=db.branches.filter(b=>b.open).map(b=>`<option value="${b.id}">${b.name}${b.hq?' (HQ)':''}</option>`).join('');
+  el.innerHTML=filtered.map(s=>{
+    const opts=(`<option value="">Pool</option>`+bOpts).replace(`value="${s.branchId}"`,`value="${s.branchId}" selected`);
+    return `<div class="staff-row">
+      <div class="avatar">${initials(s.vn,s.nn)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="staff-name">${s.vn} ${s.nn}</div>
+        <div class="staff-meta">${s.dept} · ${s.rank}${s.spec?' · '+s.spec:''}</div>
+      </div>
+      <span class="badge ${DEPT_BADGE[s.dept]||'b-gray'}" style="flex-shrink:0;margin-right:8px">${s.dept}</span>
+      <select class="staff-select" onchange="moveStaff('${s.id}',this.value)">${opts}</select>
+      <button class="btn btn-sm" onclick="openEdit('${s.id}')" style="flex-shrink:0;margin-left:6px;border-color:rgba(201,168,76,0.3);color:var(--gold2)">✎</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteStaff('${s.id}')" style="flex-shrink:0;margin-left:4px">✕</button>
+    </div>`;
+  }).join('');
+}
+function moveStaff(sid,branchId){const s=db.staff.find(x=>x.id===sid);if(s){s.branchId=branchId;persist();}}
+function deleteStaff(id){
+  const s=db.staff.find(x=>x.id===id);
+  if(!s||!confirm(`${s.vn} ${s.nn}?`))return;
+  db.staff=db.staff.filter(x=>x.id!==id);persist();renderStaff();renderOverview();
+}
+
+// ─────────────────────────────────────────────
+// EDIT MODAL
+// ─────────────────────────────────────────────
+function updateEditRankOpts(){
+  const dept=document.getElementById('e-dept').value;
+  const rs=document.getElementById('e-rank'),ss=document.getElementById('e-spec');
+  if(!dept){rs.innerHTML='<option value="">–</option>';ss.innerHTML='<option value="">–</option>';return;}
+  rs.innerHTML=getRanks(dept).map(r=>`<option>${r}</option>`).join('');updateEditSpecOpts();
+}
+function updateEditSpecOpts(){
+  const dept=document.getElementById('e-dept').value,rank=document.getElementById('e-rank').value;
+  const ss=document.getElementById('e-spec');
+  let base=null;
+  if(['Head','Advisor','Consultant','Attorney','Paralegal'].includes(rank))base=rank;
+  const specs=base&&SPECS[dept]&&SPECS[dept][base];
+  ss.innerHTML=specs?specs.map(s=>`<option>${s}</option>`).join(''):'<option value="">–</option>';
+}
+function openEdit(id){
+  const s=db.staff.find(x=>x.id===id);if(!s)return;
+  editId=id;
+  document.getElementById('e-vn').value=s.vn;
+  document.getElementById('e-nn').value=s.nn;
+  document.getElementById('e-dept').value=s.dept;
+  updateEditRankOpts();
+  document.getElementById('e-rank').value=s.rank;
+  updateEditSpecOpts();
+  document.getElementById('e-spec').value=s.spec||'';
+  fillCitySelects();
+  document.getElementById('e-city').value=s.branchId||'';
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEdit(){document.getElementById('edit-modal').classList.remove('open');editId=null;}
+function saveEdit(){
+  const s=db.staff.find(x=>x.id===editId);if(!s)return;
+  s.vn=document.getElementById('e-vn').value.trim();
+  s.nn=document.getElementById('e-nn').value.trim();
+  s.dept=document.getElementById('e-dept').value;
+  s.rank=document.getElementById('e-rank').value;
+  s.spec=document.getElementById('e-spec').value;
+  s.branchId=document.getElementById('e-city').value;
+  persist();closeEdit();renderStaff();renderOverview();
+  if(activePageId==='branches')renderBranchDetail();
+}
+
+// ─────────────────────────────────────────────
+// RECOMMEND — smart: suggest Chief, Exec VP, Head, Advisor from pool
+// ─────────────────────────────────────────────
+function renderRecommend(){
+  const ob=opens();
+  if(!ob.find(b=>b.id===recBranch))recBranch=ob[0]?.id||'nyc';
+  document.getElementById('rec-tabs').innerHTML=ob.map(b=>
+    `<button class="branch-tab${b.id===recBranch?' active':''}${b.hq?' hq':''}" onclick="selectRec('${b.id}')">
+      ${b.hq?'🏛 ':''}${b.name}
+    </button>`).join('');
+  renderRecContent();
+}
+function selectRec(id){
+  recBranch=id;
+  document.querySelectorAll('#rec-tabs .branch-tab').forEach(btn=>btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderRecContent();
+}
+function renderRecContent(){
+  const branch=db.branches.find(b=>b.id===recBranch);
+  const el=document.getElementById('rec-content');
+  if(!branch){el.innerHTML='';return;}
+  const weak=Object.entries(branch.scores).filter(([,v])=>v<50).sort((a,b)=>a[1]-b[1]);
+  const mid=Object.entries(branch.scores).filter(([,v])=>v>=50&&v<70).sort((a,b)=>a[1]-b[1]);
+  if(!weak.length&&!mid.length){
+    el.innerHTML=`<div class="rec-card"><div class="alert a-ok" style="display:block">${t('rec_all_good',{branch:branch.name})}</div></div>`;
+    return;
+  }
+  const dN={};
+  const add=(crit,score,p)=>CRITERIA_DEPT[crit].forEach(dept=>{
+    if(!dN[dept])dN[dept]={score:999,crits:[],priority:p};
+    if(!dN[dept].crits.find(c=>c.crit===crit))dN[dept].crits.push({crit,score});
+    if(p==='critical')dN[dept].priority='critical';
+    dN[dept].score=Math.min(dN[dept].score,score);
+  });
+  weak.forEach(([c,s])=>add(c,s,'critical'));
+  mid.forEach(([c,s])=>add(c,s,'medium'));
+
+  const pool=db.staff.filter(s=>!s.branchId);
+  const sorted=Object.entries(dN).sort((a,b)=>a[1].score-b[1].score);
+
+  el.innerHTML=`<div style="font-size:10px;letter-spacing:0.1em;color:var(--text3);margin-bottom:1rem;text-transform:uppercase">${t('rec_sorted')}</div>`
+  +sorted.map(([dept,info])=>{
+    const isCrit=info.priority==='critical';
+    const deptPool=pool.filter(s=>s.dept===dept);
+    const here=db.staff.filter(s=>s.branchId===branch.id&&s.dept===dept).length;
+    const tags=info.crits.map(c=>`<span class="badge ${scoreBadge(c.score)}">${c.crit}: ${c.score}</span>`).join(' ');
+
+    // Build 4-slot grid: one per rank tier
+    const wantedTiers=['chief','evp','head','advisor'];
+    const slotHtml=wantedTiers.map(tier=>{
+      const candidates=deptPool.filter(s=>getRankTier(s.rank)===tier);
+      const pick=candidates[0]||null;
+      const labelKey=TIER_LABELS[tier];
+      return `<div class="rec-staff-card">
+        <div style="min-width:0;flex:1">
+          <div class="rec-rank-label">${t(labelKey)}</div>
+          ${pick
+            ?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div class="avatar" style="width:28px;height:28px;font-size:10px">${initials(pick.vn,pick.nn)}</div>
+                <div>
+                  <div class="staff-name" style="font-size:12px">${pick.vn} ${pick.nn}</div>
+                  <div class="staff-meta">${pick.rank}${pick.spec?' · '+pick.spec:''}</div>
+                </div>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="deployStaff('${pick.id}','${branch.id}')">${t('assign')}</button>`
+            :`<div style="font-size:10px;color:var(--text3);padding:4px 0;letter-spacing:0.05em">—</div>`
+          }
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="rec-card">
+      <div class="rec-head">
+        <span class="badge ${DEPT_BADGE[dept]||'b-gray'}" style="font-size:10px;padding:4px 12px">${dept}</span>
+        <span class="badge ${isCrit?'b-red':'b-amb'}">${isCrit?'⚠ '+t('btn_critical'):'⚡ '+t('btn_improving')}</span>
+      </div>
+      <div class="crit-tags">${tags}</div>
+      ${here?`<div style="font-size:10px;color:var(--text3);margin-bottom:10px;letter-spacing:0.06em">▸ ${here}× ${dept} ${t('rec_already')} ${branch.name}</div>`:''}
+      <div class="pool-label">${t('rec_avail')}</div>
+      <div class="rec-staff-grid">${slotHtml}</div>
+    </div>`;
+  }).join('');
+}
+function deployStaff(sid,branchId){
+  const s=db.staff.find(x=>x.id===sid);if(s){s.branchId=branchId;persist();renderRecContent();renderOverview();}
+}
+
+function refresh(){fillCitySelects();renderOverview();renderBranches();renderStaff();renderRecommend();}
+hydrate();
+</script>
+</body>
+</html>
